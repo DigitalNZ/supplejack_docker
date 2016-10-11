@@ -3,7 +3,7 @@
 	url = https://github.com/DigitalNZ/supplejack_manager.git
 [submodule "worker"]
 	path = worker
-	url = https://github.com/DigitalNZsupplejack_worker.git
+	url = https://github.com/DigitalNZ/supplejack_worker.git
 [submodule "api"]
 	path = api
 	url = https://github.com/DigitalNZ/supplejack_api_app.git
