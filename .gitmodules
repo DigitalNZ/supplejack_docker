@@ -1,12 +1,14 @@
 [submodule "manager"]
 	path = manager
-	url = git@github.com:DigitalNZ/supplejack_manager.git
+	url = https://github.com/DigitalNZ/supplejack_manager.git
 [submodule "worker"]
 	path = worker
-	url = git@github.com:DigitalNZ/supplejack_worker.git
+	url = https://github.com/DigitalNZsupplejack_worker.git
 [submodule "api"]
 	path = api
-	url = git@github.com:DigitalNZ/supplejack_api_app.git
+	url = https://github.com/DigitalNZ/supplejack_api_app.git
 [submodule "solr"]
 	path = solr
-	url = git@github.com:DigitalNZ/supplejack_solr.git
+	url = https://github.com/DigitalNZ/supplejack_solr.git
+
+/
