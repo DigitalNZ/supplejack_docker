@@ -1,7 +1,7 @@
 ---
 services:
   worker:
-    git_url: git@github.com:digitalnz/supplejack_worker.git
+    git_url: https://github.com/DigitalNZ/supplejack_worker.git
     git_branch: master
     ports:
     - 3002:3002:443
@@ -9,7 +9,7 @@ services:
     env_vars:
       MONGOID_HOSTS: <ip>:27017
   sidekiq:
-    git_url: git@github.com:digitalnz/supplejack_worker.git
+    git_url: https://github.com/DigitalNZ/supplejack_worker.git
     git_branch: master
     ports:
     - 3002:3002:443
