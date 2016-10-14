@@ -1,12 +1,12 @@
 ---
 services:
   solr:
-    git_url: git@github.com:digitalnz/supplejack_solr.git
+    git_url: https://github.com/DigitalNZ/supplejack_solr.git
     git_branch: master
     ports:
     - 8983:8983:443
   api:
-    git_url: git@github.com:digitalnz/supplejack_api_app.git
+    git_url: https://github.com/DigitalNZ/supplejack_api_app.git
     git_branch: master
     ports:
     - 3000:3000:443
