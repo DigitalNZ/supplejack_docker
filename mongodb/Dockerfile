@@ -1,5 +1,5 @@
 FROM mongo
-MAINTAINER Benedict Aluan <benedict@boost.co.nz>
+MAINTAINER Boost <info@boost.co.nz>
 
 # Installation:
 # Import MongoDB public GPG key AND create a MongoDB list file
