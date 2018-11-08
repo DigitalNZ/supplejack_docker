@@ -1,0 +1,28 @@
+
+
+development:
+  clients:
+    default:
+      database: supplejack_api_development
+      hosts:
+        - 127.0.0.1:27017
+
+    strong:
+      database: supplejack_api_development
+      hosts:
+        - 127.0.0.1:27017
+
+test:
+  clients:
+    default:
+      database: supplejack_api_test
+      hosts:
+        - 127.0.0.1:27017
+
+    strong:
+      database: supplejack_api_test
+      hosts:
+        - 127.0.0.1:27017
+      options:
+        read:
+          mode: :nearest

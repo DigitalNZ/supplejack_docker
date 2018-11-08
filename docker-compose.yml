@@ -57,7 +57,7 @@ services:
       - backend
     environment:
       MANAGER_HOST: http://manager:3000
-      MANAGER_API_KEY: managerkey
+      MANAGER_API_KEY: KJ64DC023FFO
       API_HOST: http://api:3000
       API_MONGOID_HOSTS: mongodb:27017
       REDIS_URL: redis://redis:6379/0
@@ -76,7 +76,7 @@ services:
       - backend
     environment:
       MANAGER_HOST: http://manager:3000
-      MANAGER_API_KEY: managerkey
+      MANAGER_API_KEY: KJ64DC023FFO
       API_HOST: http://api:3000
       API_MONGOID_HOSTS: mongodb:27017
       REDIS_URL: redis://redis:6379/0

@@ -1,1 +1,11 @@
 /data
+
+sample_rails_api/.bundle
+sample_rails_api/db/*.sqlite3
+sample_rails_api/db/*.sqlite3-journal
+sample_rails_api/log/*
+sample_rails_api/tmp/*
+sample_rails_api/!/log/.keep
+sample_rails_api/!/tmp/.keep
+sample_rails_api/.byebug_history
+
