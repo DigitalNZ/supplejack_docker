@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DigitalNZ/supplejack_api.git
-  revision: 958e8048faf1015f03767a8d6982fa03a0b1f372
+  revision: 08fd9af0e8fc6a447444c9e1771ac95ece2f89bd
   branch: oliver/docker-install
   specs:
     supplejack_api (1)

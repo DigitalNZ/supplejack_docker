@@ -1,4 +1,4 @@
-version: '2'
+version: '3.7'
 
 services:
   redis:
@@ -10,43 +10,37 @@ services:
     ports:
       - 6379:6379
 
-  solr:
-    build: ./solr
-    container_name: solr
-    ports:
-      - '8983:8983'
-    networks:
-      - backend
-
   mongodb:
-    image: mongo:2.6.12
-    command: mongod --dbpath /data/db --smallfiles
+    image: mongo:3.6.8
+    command: mongod
+    volumes:
+      - mongodb:/data/db
     networks:
-      - backend
-
+      backend:
+        aliases:
+          - mongodb
   manager:
     build: ./manager
-    command: bundle exec rails s -p 3000
+    command: bundle exec rails s -p 3001
     ports:
-      - '3001:3000'
+      - '3001:3001'
     container_name: manager
     restart: always
     depends_on:
       - mongodb
-      - api
     networks:
       - backend
     environment:
-      WORKER_HOST: http://worker:3000
+      WORKER_HOST: http://worker:3002
       WORKER_API_KEY: workerkey
       API_HOST: http://api:3000
       API_MONGOID_HOSTS: mongodb:27017
 
   worker:
     build: ./worker
-    command: bundle exec rails s -p 3000
+    command: bundle exec rails s -p 3002
     ports:
-      - '3002:3000'
+      - '3002:3002'
     container_name: worker
     restart: always
     depends_on:
@@ -82,7 +76,7 @@ services:
       REDIS_URL: redis://redis:6379/0
 
   api:
-    build: ./api
+    build: ./sample_rails_api
     command: bundle exec rails s -p 3000
     ports:
       - '3000:3000'
@@ -95,54 +89,80 @@ services:
     networks:
       - backend
     environment:
-      MONGOID_HOSTS: mongodb:27017
+      API_MONGOID_HOSTS: mongodb:27017
       SOLR_PING: http://solr:8983/solr/admin/ping
       SOLR_URL: http://solr:8983/solr
       WORKER_API_URL: http://worker:3000
       REDIS_URL: redis://redis:6379/0
 
-  resque:
-    build: ./api
-    command: bundle exec rake environment resque:workers QUEUE=solr_index COUNT=3
-    container_name: resque
+  solr:
+    build: ./sample_rails_api
+    container_name: solr
+    command: bundle exec rake sunspot:solr:run
+    ports:
+      - '8982:8982'
+    networks:
+      - backend
+
+  sidekiq-api:
+    build: ./sample_rails_api
+    command: bundle exec sidekiq
+    container_name: sidekiq-api
     restart: always
     depends_on:
       - redis
-      - solr
       - mongodb
       - api
     networks:
       - backend
     environment:
-      MONGOID_HOSTS: mongodb:27017
+      API_MONGOID_HOSTS: mongodb:27017
       SOLR_PING: http://solr:8983/solr/admin/ping
       SOLR_URL: http://solr:8983/solr
       WORKER_API_URL: http://worker:3000
       REDIS_URL: redis://redis:6379/0
 
-  scheduler:
-    build: ./api
-    command: rake resque:scheduler
-    container_name: scheduler
-    restart: always
-    depends_on:
-      - redis
-      - solr
-      - mongodb
-      - api
-    networks:
-      - backend
-    environment:
-      MONGOID_HOSTS: mongodb:27017
-      SOLR_PING: http://solr:8983/solr/admin/ping
-      SOLR_URL: http://solr:8983/solr
-      WORKER_API_URL: http://worker:3000
-      REDIS_URL: redis://redis:6379/0
+
+  # resque:
+  #   build: ./api
+  #   command: bundle exec rake environment resque:workers QUEUE=solr_index COUNT=3
+  #   container_name: resque
+  #   restart: always
+  #   depends_on:
+  #     - redis
+  #     - solr
+  #     - mongodb
+  #     - api
+  #   networks:
+  #     - backend
+  #   environment:
+  #     MONGOID_HOSTS: mongodb:27017
+  #     SOLR_PING: http://solr:8983/solr/admin/ping
+  #     SOLR_URL: http://solr:8983/solr
+  #     WORKER_API_URL: http://worker:3000
+  #     REDIS_URL: redis://redis:6379/0
+
+  # scheduler:
+  #   build: ./api
+  #   command: rake resque:scheduler
+  #   container_name: scheduler
+  #   restart: always
+  #   depends_on:
+  #     - redis
+  #     - solr
+  #     - mongodb
+  #     - api
+  #   networks:
+  #     - backend
+  #   environment:
+  #     MONGOID_HOSTS: mongodb:27017
+  #     SOLR_PING: http://solr:8983/solr/admin/ping
+  #     SOLR_URL: http://solr:8983/solr
+  #     WORKER_API_URL: http://worker:3000
+  #     REDIS_URL: redis://redis:6379/0
 
 volumes:
   mongodb:
 
 networks:
   backend:
-    driver: bridge
-
