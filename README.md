@@ -107,17 +107,28 @@ Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis 
 
 The Supplejack components are connected by API keys. Before start using it, make sure to run the following commands to generate default users.
 
-```bash
-→ docker exec -it manager rake docker:seed
-→ docker exec -it worker rake docker:seed
-→ docker exec -it api rake docker:seed
+Make a user in the sample Api container with the following command:
+
+```
+$ docker-compose exec api rails c
+
+irb(main):001:0> SupplejackApi::User.create(email: 'info@email.com', password: 'password', password_confirmation: 'password', role: 'harvester', authentication_token: 'KJ64DC023FFO', name: 'harvester User', username: 'harvester User')
+irb(main):002:0> SupplejackApi::User.create(email: 'developer@email.com', password: 'password', password_confirmation: 'password', role: 'developer', authentication_token: '82HYSEI92N0DGN28', name: 'API USER', username: 'API USER')
+irb(main):003:0>exit
+```
+
+Make a user in the Manager container with the following command:
+
+```
+irb(main):001:0> User.create(email: 'developer@email.com', name: 'Mrs Jones', password: 'password', password_confirmation: 'password', role: 'admin')
+irb(main):002:0> exit
 ```
 
 This will generate the following user and keys.
 
 ```yaml
 Manager:
-    email: info@digitalnz.org
+    email: yourharvest@email.com
     password: password
     authentication_token: 'managerkey'
 
@@ -125,7 +136,8 @@ Worker:
     authentication_token: 'workerkey'
 
 API:
-    api_key: 'apikey'
+    api_key: 'KJ64DC023FFO' - used for harvests
+    api_key:
 ```
 
 To access the components, you need to use your Docker machine's host IP address.

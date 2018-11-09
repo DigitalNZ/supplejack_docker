@@ -31,10 +31,11 @@ services:
     networks:
       - backend
     environment:
+      WORKER_KEY: JK54SFJ94DAQQCB
       WORKER_HOST: http://worker:3002
-      WORKER_API_KEY: workerkey
       API_HOST: http://api:3000
       API_MONGOID_HOSTS: mongodb:27017
+      HARVESTER_API_KEY: KJ64DC023FFO
 
   worker:
     build: ./worker
@@ -50,8 +51,9 @@ services:
     networks:
       - backend
     environment:
+      WORKER_KEY: JK54SFJ94DAQQCB
       MANAGER_HOST: http://manager:3000
-      MANAGER_API_KEY: KJ64DC023FFO
+      HARVESTER_API_KEY: KJ64DC023FFO
       API_HOST: http://api:3000
       API_MONGOID_HOSTS: mongodb:27017
       REDIS_URL: redis://redis:6379/0
