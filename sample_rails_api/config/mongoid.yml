@@ -10,7 +10,7 @@ development:
     strong:
       database: supplejack_api_development1
       hosts:
-        - <%= ENV['API_MONGOID_HOSTS'].split(',') %>
+        - <%= ENV['API_MONGOID_HOSTS'] %>
 
 test:
   clients:
