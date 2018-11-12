@@ -1,9 +1,9 @@
 
 
 defaults: &defaults
-  SOLR_PING: 'http://localhost:8982/solr/admin/ping'
+  SOLR_PING: 'http://solr:8982/solr/admin/ping'
   HTTP_HOST: 'http://localhost:3000'
-  WORKER_API_URL: 'http://localhost:3002'
+  WORKER_API_URL: 'http://worker:3002'
   WWW_DOMAIN: 'www.dev'
   DEVISE_MAILER: 'mailer@example.com'
   RESQUE_USER: 'admin'
@@ -13,7 +13,7 @@ defaults: &defaults
   BLACKLIST_MAILER_TO: 'blacklist@mailer.com'
   BLACKLIST_MAILER_FROM: 'mailer@blacklist.org'
   HTTP_HOST: 'http://test.host'
-  MONGOID_HOSTS: 'localhost:27017'
+  MONGOID_HOSTS: 'mongodb:27017'
   SECRET_TOKEN: '1d5fccf14ea28fdf1f208f06174a7e60b58abf6c'
 
 development:

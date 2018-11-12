@@ -79,10 +79,13 @@ services:
     # networks:
     #   - backend
     environment:
+      RAILS_ENV: development
+      WORKER_KEY: JK54SFJ94DAQQCB
       MANAGER_HOST: http://manager:3000
-      MANAGER_API_KEY: KJ64DC023FFO
+      HARVESTER_API_KEY: KJ64DC023FFO
       API_HOST: http://api:3000/
       API_MONGOID_HOSTS: mongodb:27017
+      MONGOID_HOST: mongodb:27017
       REDIS_URL: redis://redis:6379/0
 
   api:
@@ -99,9 +102,10 @@ services:
     # networks:
     #   - backend
     environment:
+      RAILS_ENV: development
       API_MONGOID_HOSTS: mongodb:27017
-      SOLR_PING: http://solr:8983/solr/admin/ping
-      SOLR_URL: http://solr:8983/solr
+      SOLR_PING: http://solr:8982/solr/admin/ping
+      SOLR_URL: http://solr:8982/solr
       WORKER_API_URL: http://worker:3000/
       REDIS_URL: redis://redis:6379/0
 
@@ -113,6 +117,13 @@ services:
       - '8982:8982'
     # networks:
     #   - backend
+    environment:
+      RAILS_ENV: development
+      API_MONGOID_HOSTS: mongodb:27017
+      SOLR_PING: http://solr:8982/solr/admin/ping
+      SOLR_URL: http://solr:8982/solr
+      WORKER_API_URL: http://worker:3000/
+      REDIS_URL: redis://redis:6379/0
 
   sidekiq-api:
     build: ./sample_rails_api
@@ -126,9 +137,10 @@ services:
     # networks:
     #   - backend
     environment:
+      RAILS_ENV: development
       API_MONGOID_HOSTS: mongodb:27017
-      SOLR_PING: http://solr:8983/solr/admin/ping
-      SOLR_URL: http://solr:8983/solr
+      SOLR_PING: http://solr:8982/solr/admin/ping
+      SOLR_URL: http://solr:8982/solr
       WORKER_API_URL: http://worker:3000/
       REDIS_URL: redis://redis:6379/0
 
