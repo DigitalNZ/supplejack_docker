@@ -18,5 +18,6 @@ WORKDIR /var/api
 COPY . .
 
 EXPOSE 3000
+EXPOSE 8982
 
 CMD bundle exec puma -C config/puma.rb
