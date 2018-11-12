@@ -115,6 +115,8 @@ services:
     command: bundle exec rake sunspot:solr:run
     ports:
       - '8982:8982'
+    volumes:
+      - solrdata:/var/api/solr/development/data/
     # networks:
     #   - backend
     environment:
@@ -185,6 +187,7 @@ services:
 
 volumes:
   mongodb:
+  solrdata:
 
 # networks:
 #   backend:
