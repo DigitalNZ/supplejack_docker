@@ -5,8 +5,8 @@ services:
     image: redis:2.8
     container_name: redis
     restart: always
-    networks:
-      - backend
+    # networks:
+    #   - backend
     ports:
       - 6379:6379
 
@@ -15,47 +15,55 @@ services:
     command: mongod
     volumes:
       - mongodb:/data/db
-    networks:
-      backend:
-        aliases:
-          - mongodb
+    # networks:
+    #   backend:
+    #     aliases:
+    #       - mongodb
   manager:
-    build: ./manager
-    command: bundle exec rails s -p 3001
+    build:
+      context: ./manager
+      args:
+        - RAILS_ENV=staging
+    command: bundle exec rails s -b 0.0.0.0
     ports:
-      - '3001:3001'
+      - '3001:3000'
     container_name: manager
     restart: always
     depends_on:
       - mongodb
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
-      WORKER_KEY: JK54SFJ94DAQQCB
-      WORKER_HOST: http://worker:3002
-      API_HOST: http://api:3000
-      API_MONGOID_HOSTS: mongodb:27017
-      HARVESTER_API_KEY: KJ64DC023FFO
+      RAILS_ENV: staging
+      STAGING_WORKER_KEY: JK54SFJ94DAQQCB
+      STAGING_WORKER_HOST: http://worker:3000/
+      STAGING_API_HOST: http://api:3000/
+      STAGING_API_MONGOID_HOSTS: mongodb:27017
+      STAGING_HARVESTER_API_KEY: KJ64DC023FFO
+      STAGING_AIRBRAKE_PROJECT_ID: 1
+      STAGING_AIRBRAKE_PROJECT_API_KEY: 1
 
   worker:
     build: ./worker
-    command: bundle exec rails s -p 3002
+    command: bundle exec rails s
     ports:
-      - '3002:3002'
+      - '3002:3000'
     container_name: worker
     restart: always
     depends_on:
       - redis
       - mongodb
       - api
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
+      RAILS_ENV: development
       WORKER_KEY: JK54SFJ94DAQQCB
       MANAGER_HOST: http://manager:3000
       HARVESTER_API_KEY: KJ64DC023FFO
-      API_HOST: http://api:3000
+      API_HOST: http://api:3000/
       API_MONGOID_HOSTS: mongodb:27017
+      MONGOID_HOST: mongodb:27017
       REDIS_URL: redis://redis:6379/0
 
   sidekiq:
@@ -68,18 +76,18 @@ services:
       - mongodb
       - api
       - worker
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       MANAGER_HOST: http://manager:3000
       MANAGER_API_KEY: KJ64DC023FFO
-      API_HOST: http://api:3000
+      API_HOST: http://api:3000/
       API_MONGOID_HOSTS: mongodb:27017
       REDIS_URL: redis://redis:6379/0
 
   api:
     build: ./sample_rails_api
-    command: bundle exec rails s -p 3000
+    command: bundle exec rails s
     ports:
       - '3000:3000'
     container_name: api
@@ -88,13 +96,13 @@ services:
       - redis
       - solr
       - mongodb
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       API_MONGOID_HOSTS: mongodb:27017
       SOLR_PING: http://solr:8983/solr/admin/ping
       SOLR_URL: http://solr:8983/solr
-      WORKER_API_URL: http://worker:3000
+      WORKER_API_URL: http://worker:3000/
       REDIS_URL: redis://redis:6379/0
 
   solr:
@@ -103,8 +111,8 @@ services:
     command: bundle exec rake sunspot:solr:run
     ports:
       - '8982:8982'
-    networks:
-      - backend
+    # networks:
+    #   - backend
 
   sidekiq-api:
     build: ./sample_rails_api
@@ -115,13 +123,13 @@ services:
       - redis
       - mongodb
       - api
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       API_MONGOID_HOSTS: mongodb:27017
       SOLR_PING: http://solr:8983/solr/admin/ping
       SOLR_URL: http://solr:8983/solr
-      WORKER_API_URL: http://worker:3000
+      WORKER_API_URL: http://worker:3000/
       REDIS_URL: redis://redis:6379/0
 
 
@@ -166,5 +174,5 @@ services:
 volumes:
   mongodb:
 
-networks:
-  backend:
+# networks:
+#   backend:
