@@ -4,10 +4,14 @@ Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis 
 ### Features
 - Redis container
 - Solr container
-- Data container (Docker volumes for mongo and solr-index)
-- Supplejack worker container
+- Docker volumes for mongo and solr-index
+- Supplejack worker container: rails
+- Supplejack worker container: sidekiq
 - Supplejack manager container
-- Supplejack sample API container
+- Supplejack sample API container: rails
+- Supplejack sample API container: sidekiq + crons for indexing
+
+Note that the cronjob for indexing new records in to solr runs once per minute, as does the Solr autocommit.
 
 ### Prerequisites
 - Docker
