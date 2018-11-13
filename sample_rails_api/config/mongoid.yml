@@ -11,18 +11,3 @@ development:
       database: supplejack_api_development1
       hosts:
         - <%= ENV['API_MONGOID_HOSTS'] %>
-
-test:
-  clients:
-    default:
-      database: supplejack_api_test
-      hosts:
-        - <%= ENV['API_MONGOID_HOSTS'].gsub(/\s+/, "").split(',') %>
-
-    strong:
-      database: supplejack_api_test
-      hosts:
-        - <%= ENV['API_MONGOID_HOSTS'].gsub(/\s+/, "").split(',') %>
-      options:
-        read:
-          mode: :nearest

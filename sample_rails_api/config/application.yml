@@ -15,7 +15,11 @@ defaults: &defaults
   HTTP_HOST: 'http://test.host'
   MONGOID_HOSTS: 'mongodb:27017'
   SECRET_TOKEN: '1d5fccf14ea28fdf1f208f06174a7e60b58abf6c'
-
+  RAILS_ENV: 'development'
+  API_MONGOID_HOSTS: 'mongodb:27017'
+  SOLR_URL: 'http://solr:8982/solr/development/'
+  WORKER_API_URL: 'http://worker:3000/'
+  REDIS_URL: 'redis://redis:6379/1'
 development:
   <<: *defaults
 
