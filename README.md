@@ -90,9 +90,9 @@ This will generate the following user and keys.
 
 ```yaml
 Manager:
-    email: yourharvest@email.com
+    email: developer@email.com
     password: password
-    authentication_token: 'managerkey'
+    authentication_token: '82HYSEI92N0DGN28'
 # log in to the manager with this user
 
 Worker:
@@ -103,14 +103,7 @@ API:
     api_key: '82HYSEI92N0DGN28' - used for normal api requests
 ```
 
-To access the components, you need to use your Docker machine's host IP address.
-
-```bash
-→ echo $DOCKER_HOST
-→ tcp://192.168.99.100:2376
-```
-
-Use the appropriate ports to access each components.
+Use the appropriate localhost ports to access the services:
 
 ```yaml
 → api: http://localhost:3000/records.json?api_key=82HYSEI92N0DGN28
@@ -124,12 +117,13 @@ Use the appropriate ports to access each components.
 
 - Get started with harvesting by creating your first parser.
 
-    http://digitalnz.github.io/supplejack/manager/introduction-to-parser-scripts.html
+    [http://digitalnz.github.io/supplejack/manager/introduction-to-parser-scripts.html](http://digitalnz.github.io/supplejack/manager/introduction-to-parser-scripts.html)
     
     or for a walk through, you can jump to step 6 of this guide:
     
-    http://digitalnz.github.io/supplejack/start/installation-walk-through-by-example.html#step-six
+    [http://digitalnz.github.io/supplejack/start/installation-walk-through-by-example.html#step-six](http://digitalnz.github.io/supplejack/start/installation-walk-through-by-example.html#step-six)
 
+    visit [localhost:3001](http://localhost:3001), and sign in as developer@email.com as above, to get started.
 
 - Know your Record Schema.
 
