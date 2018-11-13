@@ -25,8 +25,6 @@ services:
     restart: always
     depends_on:
       - mongodb
-    # networks:
-    #   - backend
     environment:
       RAILS_ENV: staging
       STAGING_WORKER_KEY: JK54SFJ94DAQQCB
@@ -48,8 +46,6 @@ services:
       - redis
       - mongodb
       - api
-    # networks:
-    #   - backend
     environment:
       RAILS_ENV: development
       WORKER_KEY: JK54SFJ94DAQQCB
@@ -70,8 +66,6 @@ services:
       - mongodb
       - api
       - worker
-    # networks:
-    #   - backend
     environment:
       RAILS_ENV: development
       WORKER_KEY: JK54SFJ94DAQQCB
