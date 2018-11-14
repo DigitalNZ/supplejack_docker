@@ -63,6 +63,8 @@ Note that the cronjob for indexing new records in to solr runs once per minute, 
     47fba6738e23        mongo:3.6.8      "/entrypoint.sh mongo"   17 hours ago        Up 57 seconds       27017/tcp                supplejackdocker_mongodb_1
     ```
 
+4. If you exit the docker process for any reason, make sure you run `docker-compose down` before running `docker-compose up` again.  This will ensure the PID'S are correctly reset.
+
 ### Seeding Data
 
 The Supplejack components are connected by API keys. Before start using it, make sure to run the following commands to generate default users.
