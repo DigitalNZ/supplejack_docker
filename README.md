@@ -119,17 +119,206 @@ Use the appropriate localhost ports to access the services:
 → solr: http://localhost:8982/solr
 ```
 
+### Example harvest
+
+Log into your manager at [localhost:3001](http://localhost:3001) and click ‘New Data Source’, give it a **name** and a **contributor**.
+
+Once it completes, hover over ‘Contributors and Scripts’ in the top navigation, click ‘Parser Scripts’, and then click ‘New Parser Script’.
+
+Name your parser, `Otago Hocken`, select the contributor and data source that you created before, and then choose OAI format.
+
+The click ‘Create Parser Script’.
+
+You will now have a screen which will allow you to write your parser script for the harvester, this parser is written in Ruby and has it’s own DSL.[The documentation for the parser DSL can be found here](http://digitalnz.github.io/supplejack/)
+
+Make your parser look like this:
+
+
+```ruby
+class OtagoHocken < SupplejackCommon::Oai::Base
+  base_url "http://otago.ourheritage.ac.nz/oai-pmh-repository/request"
+  validates :usage, inclusion: {in: ["Share", "Modify", "Use commercially", "All rights reserved", "Unknown"]}
+
+  validates :landing_url, format: {with: /\Ahttps?:/}
+  validates :thumbnail_url, format: {with: /\Ahttps?:/}
+  validates :large_thumbnail_url, format: {with: /\Ahttps?:/}
+  validates :landing_url, size: { is: 1 }
+  validates :internal_identifier, size: { is: 1 }
+
+  namespaces dc: 'http://purl.org/dc/elements/1.1/',
+             oai_dc: 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                    xsi: 'http://www.w3.org/2001/XMLSchema-instance',
+            dcterms: 'http://purl.org/dc/terms/',
+                        o: 'http://www.openarchives.org/OAI/2.0/'
+
+  attributes :content_partner, :display_content_partner,     default: "University of Otago"
+  attributes :display_collection, :primary_collection,       default: "Otago University Research Heritage"
+  attribute  :collection,                                                                  default: ["Otago University Research Heritage"]
+  attributes :copyright, :usage,                             default: "All rights reserved"
+  attributes :dc_rights, :rights_url,                        default: "http://digital.otago.ac.nz/terms.php"
+  #attribute :dc_type, default: "Watercolors"
+
+  attribute :title,         xpath: "//dc:title"
+  attribute :description,   xpath: "//dc:description"
+  attribute :date,          xpath: "//dc:date",        date: true
+  attribute :display_date,  xpath: "//dc:date"
+  attribute :contributor,   xpath: "//dc:contributor"
+  attribute :publisher,     xpath: "//dc:publisher"
+  attribute :subject,         xpath: "//dc:subject"
+  attribute :source,          xpath: "//dc:source"
+  attribute :creator,         xpath: "//dc:creator"
+  attribute :dc_type,         xpath: "//dc:type"
+  attribute :format,          xpath: "//dc:format"
+
+  attribute :category do
+    category = "Images"
+    category = "Videos" if get(:dc_type).find_with(/^Video$/).present?
+    category
+  end
+
+  attributes :landing_url do
+    fetch("//dc:identifier").find_with(/^http:\/\/otago.ourheritage.ac.nz\/items\/show/)
+  end
+
+  attribute :internal_identifier do
+    get(:landing_url).downcase
+  end
+
+  attributes :large_thumbnail_url do
+    fetch("//dc:identifier").find_with(/\.jpg$/).mapping(/original/ => 'fullsize').first
+  end
+
+  attributes :thumbnail_url do
+    get(:large_thumbnail_url).mapping(/fullsize/ => 'square_thumbnails')
+  end
+
+  attribute :dc_identifier do
+    dcidentifier = get(:dc_identifier)
+    dcidentifier += fetch("//header/identifier")
+    dcidentifier += fetch("//metadata//identifier").find_without(/^http/)
+    dcidentifier
+  end
+
+  reject_if do
+    not get(:landing_url).find_with(/^http/i).present?
+  end
+end
+```
+
+You should now be able to preview your parser! Click the preview button and the various components of Supplejack will whurr into a working state.
+
+If your preview is successful, you will see a modal window appear a json object of the potential records. Something like this:
+
+```json
+{
+  "priority": 0,
+  "match_concepts": null,
+  "content_partner": [
+    "University of Otago"
+  ],
+  "display_content_partner": [
+    "University of Otago"
+  ],
+  "display_collection": [
+    "Otago University Research Heritage"
+  ],
+  "primary_collection": [
+    "Otago University Research Heritage"
+  ],
+  "collection": [
+    "Otago University Research Heritage"
+  ],
+  "copyright": [
+    "All rights reserved"
+  ],
+  "usage": [
+    "All rights reserved"
+  ],
+  "dc_rights": [
+    "http://digital.otago.ac.nz/terms.php"
+  ],
+  "rights_url": [
+    "http://digital.otago.ac.nz/terms.php"
+  ],
+  "title": [
+    "Gog and Magog, Stewart Island. 1880."
+  ],
+  "description": [
+    "Lower left (l.l.) in ink: W. Deverell Jany 1880; margin below image in pencil: Gog &amp; Magog Stewart Island."
+  ],
+  "date": [
+
+  ],
+  "display_date": [
+
+  ],
+  "contributor": [
+
+  ],
+  "publisher": [
+
+  ],
+  "subject": [
+    "Islands",
+    "Landscape"
+  ],
+  "source": [
+    "Found uncatalogued in Hocken 1947. Dr T.M. Hocken’s Collection"
+  ],
+  "creator": [
+    "unknown"
+  ],
+  "dc_type": [
+    "Image",
+    "Still Image",
+    "Watercolors",
+    "Art"
+  ],
+  "format": [
+
+  ],
+  "category": [
+    "Images"
+  ],
+  "landing_url": [
+    "http://otago.ourheritage.ac.nz/items/show/4480"
+  ],
+  "internal_identifier": [
+    "http://otago.ourheritage.ac.nz/items/show/4480"
+  ],
+  "large_thumbnail_url": [
+    "http://s3.amazonaws.com/ourheritagemedia%2Ffullsize%2Fa24297b36e4d17d4b8bd4da8f7d6bb6c.jpg"
+  ],
+  "thumbnail_url": [
+    "http://s3.amazonaws.com/ourheritagemedia%2Fsquare_thumbnails%2Fa24297b36e4d17d4b8bd4da8f7d6bb6c.jpg"
+  ],
+  "dc_identifier": [
+    "oai:otago.ourheritage.ac.nz:4480"
+  ],
+  "source_id": "otago-hocken",
+  "data_type": "record"
+}
+```
+
+If you have a successful preview, close the modal window, scroll to the bottom of the page, enter some text in the message field (this is for parser version control), and click Update Parser Script.  Next, in the righthand columns, click on the name of your parser script under **History**, then click the blue button **Tag as Staging**.
+
+You can now run a staging harvest, note that ‘Staging’ is a term bound to the Manager and does not relate to the Rails environment.
+
+Click ‘Run Harvest’, and then click ‘Staging Harvest’, enter 50, and then click start.
+
+
+Once the harvest is complete, it will take up to a minute for records to appear in solr, and the api response (indexing and solr auto-commit is set to every 60s)
+
+You can now see your records on the API! Go to [http://localhost:3000/records.json?api_key=82HYSEI92N0DGN28](http://localhost:3000/records.json?api_key=82HYSEI92N0DGN28) to see the serialized JSON response from Solr.
+
+You can also see them directly in solr at [http://localhost:8982/solr/#/development/query](http://localhost:8982/solr/#/development/query) and [http://localhost:8982/solr/development/select?q=*%3A*&wt=json&indent=true](http://localhost:8982/solr/#/development/query)
+
 ### What's next?
 
 - Get started with harvesting by creating your first parser.
 
     [http://digitalnz.github.io/supplejack/manager/introduction-to-parser-scripts.html](http://digitalnz.github.io/supplejack/manager/introduction-to-parser-scripts.html)
-    
-    or for a walk through, you can jump to step 6 of this guide:
-    
-    [http://digitalnz.github.io/supplejack/start/installation-walk-through-by-example.html#step-six](http://digitalnz.github.io/supplejack/start/installation-walk-through-by-example.html#step-six)
 
-    visit [localhost:3001](http://localhost:3001), and sign in as developer@email.com as above, to get started.
 
 - Know your Record Schema.
 
