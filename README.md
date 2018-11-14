@@ -309,7 +309,7 @@ Click ‘Run Harvest’, and then click ‘Staging Harvest’, enter 50, and the
 
 Once the harvest is complete, it will take up to a minute for records to appear in solr, and the api response (indexing and solr auto-commit is set to every 60s)
 
-You can now see your records on the API! Go to [http://localhost:3000/records.json?api_key=82HYSEI92N0DGN28](http://localhost:3000/records.json?api_key=82HYSEI92N0DGN28) to see the serialized JSON response from Solr.
+You can now see your records on the API! Go to [http://localhost:3000/records.json?api_key=82HYSEI92N0DGN28](http://localhost:3000/records.json?api_key=82HYSEI92N0DGN28) to see the serialized JSON response.
 
 You can also see them directly in solr at [http://localhost:8982/solr/#/development/query](http://localhost:8982/solr/#/development/query) and [http://localhost:8982/solr/development/select?q=*%3A*&wt=json&indent=true](http://localhost:8982/solr/#/development/query)
 
