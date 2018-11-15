@@ -1,0 +1,36 @@
+
+
+defaults: &defaults
+  SOLR_PING: 'http://solr:8982/solr/admin/ping'
+  HTTP_HOST: 'http://localhost:3000'
+  WORKER_API_URL: 'http://worker:3002'
+  WWW_DOMAIN: 'www.dev'
+  DEVISE_MAILER: 'mailer@example.com'
+  RESQUE_USER: 'admin'
+  RESQUE_PASS: 'password'
+  HARVESTER_IPS: '127.0.0.1'
+  REQUEST_LIMIT_MAILER: 'develop@digitalnz.org'
+  BLACKLIST_MAILER_TO: 'blacklist@mailer.com'
+  BLACKLIST_MAILER_FROM: 'mailer@blacklist.org'
+  HTTP_HOST: 'http://test.host'
+  MONGOID_HOSTS: 'mongodb:27017'
+  SECRET_TOKEN: '1d5fccf14ea28fdf1f208f06174a7e60b58abf6c'
+  RAILS_ENV: 'development'
+  API_MONGOID_HOSTS: 'mongodb:27017'
+  SOLR_URL: 'http://solr:8982/solr/development/'
+  WORKER_API_URL: 'http://worker:3000/'
+  REDIS_URL: 'redis://redis:6379/1'
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+  SOLR_PING: 'http://test.host'
+  HTTP_HOST: 'http://test.host'
+  WWW_DOMAIN: 'test.host'
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

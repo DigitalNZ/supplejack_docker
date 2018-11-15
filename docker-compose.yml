@@ -1,50 +1,43 @@
-version: '2'
+version: '3.7'
 
 services:
   redis:
     image: redis:2.8
     container_name: redis
     restart: always
-    networks:
-      - backend
     ports:
       - 6379:6379
 
-  solr:
-    build: ./solr
-    container_name: solr
-    ports:
-      - '8983:8983'
-    networks:
-      - backend
-
   mongodb:
-    image: mongo:2.6.12
-    command: mongod --dbpath /data/db --smallfiles
-    networks:
-      - backend
-
+    image: mongo:3.6.8
+    command: mongod
+    volumes:
+      - mongodb:/data/db
   manager:
-    build: ./manager
-    command: bundle exec rails s -p 3000
+    build:
+      context: ./manager
+      args:
+        - RAILS_ENV=staging
+    command: bundle exec rails s -b 0.0.0.0
     ports:
       - '3001:3000'
     container_name: manager
     restart: always
     depends_on:
       - mongodb
-      - api
-    networks:
-      - backend
     environment:
-      WORKER_HOST: http://worker:3000
-      WORKER_API_KEY: workerkey
-      API_HOST: http://api:3000
-      API_MONGOID_HOSTS: mongodb:27017
+      RAILS_ENV: staging
+      STAGING_WORKER_KEY: JK54SFJ94DAQQCB
+      STAGING_WORKER_HOST: http://worker:3000/
+      STAGING_API_HOST: http://api:3000/
+      STAGING_API_MONGOID_HOSTS: mongodb:27017
+      STAGING_HARVESTER_API_KEY: KJ64DC023FFO
+      STAGING_AIRBRAKE_PROJECT_ID: 1
+      STAGING_AIRBRAKE_PROJECT_API_KEY: 1
 
   worker:
     build: ./worker
-    command: bundle exec rails s -p 3000
+    command: bundle exec rails s
     ports:
       - '3002:3000'
     container_name: worker
@@ -53,13 +46,14 @@ services:
       - redis
       - mongodb
       - api
-    networks:
-      - backend
     environment:
+      RAILS_ENV: development
+      WORKER_KEY: JK54SFJ94DAQQCB
       MANAGER_HOST: http://manager:3000
-      MANAGER_API_KEY: managerkey
-      API_HOST: http://api:3000
+      HARVESTER_API_KEY: KJ64DC023FFO
+      API_HOST: http://api:3000/
       API_MONGOID_HOSTS: mongodb:27017
+      MONGOID_HOST: mongodb:27017
       REDIS_URL: redis://redis:6379/0
 
   sidekiq:
@@ -72,18 +66,19 @@ services:
       - mongodb
       - api
       - worker
-    networks:
-      - backend
     environment:
+      RAILS_ENV: development
+      WORKER_KEY: JK54SFJ94DAQQCB
       MANAGER_HOST: http://manager:3000
-      MANAGER_API_KEY: managerkey
-      API_HOST: http://api:3000
+      HARVESTER_API_KEY: KJ64DC023FFO
+      API_HOST: http://api:3000/
       API_MONGOID_HOSTS: mongodb:27017
+      MONGOID_HOST: mongodb:27017
       REDIS_URL: redis://redis:6379/0
 
   api:
-    build: ./api
-    command: bundle exec rails s -p 3000
+    build: ./sample_rails_api
+    command: bundle exec rails s
     ports:
       - '3000:3000'
     container_name: api
@@ -92,57 +87,47 @@ services:
       - redis
       - solr
       - mongodb
-    networks:
-      - backend
     environment:
-      MONGOID_HOSTS: mongodb:27017
-      SOLR_PING: http://solr:8983/solr/admin/ping
-      SOLR_URL: http://solr:8983/solr
-      WORKER_API_URL: http://worker:3000
-      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: development
+      API_MONGOID_HOSTS: mongodb:27017
+      SOLR_PING: http://solr:8982/solr/admin/ping
+      SOLR_URL: http://solr:8982/solr/development/
+      WORKER_API_URL: http://worker:3000/
+      REDIS_URL: redis://redis:6379/1
 
-  resque:
-    build: ./api
-    command: bundle exec rake environment resque:workers QUEUE=solr_index COUNT=3
-    container_name: resque
+  solr:
+    build: ./sample_rails_api
+    container_name: solr
+    command: bundle exec rake sunspot:solr:run
+    ports:
+      - '8982:8982'
+    volumes:
+      - solrdata:/var/api/solr/development/data/
+    environment:
+      RAILS_ENV: development
+      API_MONGOID_HOSTS: mongodb:27017
+      SOLR_PING: http://solr:8982/solr/admin/ping
+      SOLR_URL: http://solr:8982/solr/development/
+      WORKER_API_URL: http://worker:3000/
+      REDIS_URL: redis://redis:6379/1
+
+  sidekiq-api:
+    build: ./sample_rails_api
+    command: ['bash', -c, 'cron && bundle exec sidekiq']
+    container_name: sidekiq-api
     restart: always
     depends_on:
       - redis
-      - solr
       - mongodb
       - api
-    networks:
-      - backend
     environment:
-      MONGOID_HOSTS: mongodb:27017
-      SOLR_PING: http://solr:8983/solr/admin/ping
-      SOLR_URL: http://solr:8983/solr
-      WORKER_API_URL: http://worker:3000
-      REDIS_URL: redis://redis:6379/0
-
-  scheduler:
-    build: ./api
-    command: rake resque:scheduler
-    container_name: scheduler
-    restart: always
-    depends_on:
-      - redis
-      - solr
-      - mongodb
-      - api
-    networks:
-      - backend
-    environment:
-      MONGOID_HOSTS: mongodb:27017
-      SOLR_PING: http://solr:8983/solr/admin/ping
-      SOLR_URL: http://solr:8983/solr
-      WORKER_API_URL: http://worker:3000
-      REDIS_URL: redis://redis:6379/0
+      RAILS_ENV: development
+      API_MONGOID_HOSTS: mongodb:27017
+      SOLR_PING: http://solr:8982/solr/admin/ping
+      SOLR_URL: http://solr:8982/solr/development/
+      WORKER_API_URL: http://worker:3000/
+      REDIS_URL: redis://redis:6379/1
 
 volumes:
   mongodb:
-
-networks:
-  backend:
-    driver: bridge
-
+  solrdata:

@@ -1,0 +1,38 @@
+
+class RecordSchema
+  include SupplejackApi::SupplejackSchema
+  # Namespaces
+  namespace :dc, url: 'http://purl.org/dc/elements/1.1/'
+  # Fields
+  string    :record_id, store: false
+  string    :internal_identifier
+  string    :title,  search_boost: 10,  search_as: [:filter, :fulltext], namespace: :dc
+  string    :description,  search_boost: 2,  search_as: [:filter, :fulltext],  namespace:   :dc
+  string    :display_collection,  search_as: [:filter, :fulltext],  namespace: :sj
+  string    :display_content_partner, multi_value: true,  namespace: :dc
+  string    :category,  multi_value: true,  search_as: [:filter]
+  string    :source_url
+  string    :landing_url
+  string    :status
+  datetime  :created_at, date_format: '%y/%d/%m'
+
+  # Groups
+  group :default do
+    fields [
+      :record_id,
+      :internal_identifier,
+      :title,
+      :description,
+      :category,
+      :display_content_partner,
+      :display_collection,
+      :source_url,
+      :landing_url
+    ]
+  end
+
+  # Roles
+  role :developer, default: true
+  role :admin, admin: true
+  role :harvester, harvester: true
+end
