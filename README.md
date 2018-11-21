@@ -1,5 +1,5 @@
-# 🌱 Supplejack Docker
-
+# Supplejack Docker
+# ![](http://digitalnz.github.io/supplejack/images/supplejack_logo.png)
 Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis and Solr).
 
 ### Features
