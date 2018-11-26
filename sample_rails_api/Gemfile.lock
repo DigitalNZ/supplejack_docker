@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/DigitalNZ/supplejack_api.git
-  revision: 08fd9af0e8fc6a447444c9e1771ac95ece2f89bd
-  branch: oliver/docker-install
+  revision: ae7b7531d67b17f8672d2153298b7360f5d8e14a
+  tag: 3.1.3
   specs:
     supplejack_api (1)
       active_model_serializers
@@ -352,14 +352,14 @@ GEM
     tilt (2.0.8)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    uglifier (4.1.19)
+    uglifier (4.1.20)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
     unicode_utils (1.4.0)
-    warden (1.2.7)
-      rack (>= 1.0)
+    warden (1.2.8)
+      rack (>= 2.0.6)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -385,4 +385,4 @@ DEPENDENCIES
   whenever (~> 0.10.0)
 
 BUNDLED WITH
-   1.16.4
+   1.17.1
