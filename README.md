@@ -19,7 +19,7 @@ Note that the cronjob for indexing new records in to solr runs once per minute, 
 - Docker Compose
 
 ### Getting Started
-- Setup Guide found [here](http://digitalnz.github.io/supplejack/start/docker-setup.html)
+- Setup Guide found [here](http://digitalnz.github.io/supplejack/start_docker/docker-setup.html)
 
 ### Questions/Issues?
 File a new [issue](https://github.com/digitalnz/supplejack_docker/issues/new) if you have questions or issues.
