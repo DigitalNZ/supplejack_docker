@@ -13,6 +13,7 @@ WORKDIR /tmp
 
 RUN gem install bundler
 RUN NOKOGIRI_USE_SYSTEM_LIBRARIES=1 bundle install
+RUN rails db:seed
 
 WORKDIR /var/api
 COPY . .

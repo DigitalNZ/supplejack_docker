@@ -1,1 +1,2 @@
-SupplejackApi::User.create(email: 'yourharvest@email.com', password: 'password', password_confirmation: 'password', role: 'harvester', authentication_token: 'KJ64DC023FFO', name: 'harvester User', username: 'harvester User')
+SupplejackApi::User.find_or_create_by(email: 'info@email.com', password: 'password', password_confirmation: 'password', role: 'harvester', authentication_token: 'KJ64DC023FFO', name: 'harvester User', username: 'harvester User')
+SupplejackApi::User.find_or_create_by(email: 'developer@email.com', password: 'password', password_confirmation: 'password', role: 'developer', authentication_token: '82HYSEI92N0DGN28', name: 'Mr Jones', username: 'jonesy')
