@@ -9,7 +9,7 @@ defaults: &defaults
   RESQUE_USER: 'admin'
   RESQUE_PASS: 'password'
   HARVESTER_IPS: '127.0.0.1'
-  REQUEST_LIMIT_MAILER: 'develop@digitalnz.org'
+  REQUEST_LIMIT_MAILER: '<user@mailer.com>' # Add admin/service email address here
   BLACKLIST_MAILER_TO: 'blacklist@mailer.com'
   BLACKLIST_MAILER_FROM: 'mailer@blacklist.org'
   HTTP_HOST: 'http://test.host'
