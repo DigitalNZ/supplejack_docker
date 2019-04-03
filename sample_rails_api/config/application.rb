@@ -29,5 +29,10 @@ module SampleRailsApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Check Request Limit Mailer is setup correctly
+    if ENV['REQUEST_LIMIT_MAILER' == '<youremail@example.com>'
+      Rails.logger.warn "REQUEST_LIMIT_MAILER is set to the default value, make sure you update this in your application.rb config file."
+    end
   end
 end
