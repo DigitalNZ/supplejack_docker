@@ -31,7 +31,8 @@ module SampleRailsApi
     config.api_only = true
 
     # Check Request Limit Mailer is setup correctly
-    if ENV['REQUEST_LIMIT_MAILER' == '<youremail@example.com>'
+    if ENV['REQUEST_LIMIT_MAILER'] == '<youremail@example.com>'
+      Rails.logger = Logger.new(STDOUT)
       Rails.logger.warn "REQUEST_LIMIT_MAILER is set to the default value, make sure you update this in your application.rb config file."
     end
   end

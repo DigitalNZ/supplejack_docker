@@ -30,4 +30,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  users:
+    blank_token: Please provide a API Key
   hello: "Hello world"
