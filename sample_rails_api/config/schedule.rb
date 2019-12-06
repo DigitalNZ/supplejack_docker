@@ -7,7 +7,7 @@ env :GEM_HOME, ENV['GEM_HOME']
 env :BUNDLE_BIN_PATH, ENV['BUNDLE_BIN_PATH']
 
 set :environment, :development
-set :ruby_version, '2.3.1'
+set :ruby_version, '2.6.5'
 job_type :runner,  "cd :path && bundle exec rails runner -e :environment ':task' :output"
 set :output, {:error => 'log/development.log', :standard => 'log/development.log'}
 
