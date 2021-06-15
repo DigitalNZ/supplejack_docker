@@ -249,7 +249,8 @@ GEM
       terrapin (~> 0.6.0)
     pr_geohash (1.0.0)
     progressbar (1.11.0)
-    puma (3.12.6)
+    puma (4.3.8)
+      nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -356,7 +357,7 @@ DEPENDENCIES
   byebug
   listen (>= 3.0.5, < 3.2)
   mongoid_auto_increment (~> 0.1.5)
-  puma (~> 3.12)
+  puma (~> 4.3)
   rails (~> 5.2.0)
   spring
   spring-watcher-listen (~> 2.0.0)
